@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import math
-from shuffle import shuffle
+from sorting import shuffle
 
 
 class Point2D(object):
