@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import sys
+import os
+sys.path.append(os.pardir)
 import math
 from sorting import shuffle
 
@@ -59,7 +62,7 @@ if __name__ == '__main__':
     ps = [(7, 1), (7, 2), (9, 3), (4, 5), (2, 8), (-4, 7), (-6, 4), (-2, 5), (-5, -2), (-1, -4), (2, -1),
           (5, -2)]
 
-    shuffle(ps)
+    shuffle.shuffle(ps)
     arbitrary_points = [Point2D(x, y) for x, y in ps]
     print convex_hull(arbitrary_points)
 
