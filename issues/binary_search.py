@@ -40,7 +40,7 @@ def binary_search_recursive(items, needed, _lo=0, _hi=None):
 
 
 if __name__ == 'main':
-    items = range(1000)
+    items = range(103)
     # just to show that binary search requires sorted input
     assert is_sorted(items)
     assert binary_search(items, 10) == 9
