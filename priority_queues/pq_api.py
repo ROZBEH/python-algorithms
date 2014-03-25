@@ -35,23 +35,23 @@ class UnorderedMaxPQ(object):
 
 class MaxPQ(object):
     """
-    Priority queue with binary heap data structure
+    Max oriented priority queue with binary heap data structure
     """
     def __init__(self):
-        self.data = [None]
+        self.data = []
 
-    def insert(self, item):
+    def push(self, item):
         self.data.append(item)
         self._swim(len(self) - 1)
 
     def _swim(self, k):
-        while k > 1 and self.data[k] > self.data[k / 2]:
+        while k > 0 and self.data[k] > self.data[k / 2]:
             self.data[k], self.data[k / 2] = self.data[k / 2], self.data[k]
             k /= 2
 
     def _sink(self, k):
-        while k * 2 < len(self):
-            j = k * 2
+        while k * 2 + 1 < len(self):
+            j = k * 2 + 1
             if j + 1 < len(self) and self.data[j] < self.data[j + 1]:
                 j += 1
             if self.data[k] >= self.data[j]:
@@ -60,16 +60,67 @@ class MaxPQ(object):
                 self.data[k], self.data[j] = self.data[j], self.data[k]
             k = j
 
-    def del_max(self):
-        max = self.data[1]
-        self.data[1], self.data[len(self) - 1] = self.data[len(self) - 1], self.data[1]
-        self._sink(1)
+    def pop(self):
+        max = self.data[0]
+        self.data[0], self.data[len(self) - 1] = self.data[len(self) - 1], self.data[0]
         self.data.pop()
+        self._sink(0)
         return max
 
     @property
-    def is_empty(self):
-        return len(self) == 0
+    def max(self):
+        return self.data[0]
+
+    def __nonzero__(self):
+        return len(self) > 0
+
+    def __len__(self):
+        return len(self.data)
+
+    def __iter__(self):
+        return iter(self.data)
+
+
+class MinPQ(object):
+    """
+    Min oriented priority queue with binary heap data structure
+    """
+    def __init__(self):
+        self.data = []
+
+    def push(self, item):
+        self.data.append(item)
+        self._swim(len(self) - 1)
+
+    def _swim(self, k):
+        while k > 0 and self.data[k] < self.data[k / 2]:
+            self.data[k], self.data[k / 2] = self.data[k / 2], self.data[k]
+            k /= 2
+
+    def _sink(self, k):
+        while k * 2 + 1 < len(self):
+            j = k * 2 + 1
+            if j + 1 < len(self) and self.data[j + 1] < self.data[j]:
+                j += 1
+            if self.data[k] <= self.data[j]:
+                break
+            else:
+                self.data[k], self.data[j] = self.data[j], self.data[k]
+            k = j
+
+    def pop(self):
+        min = self.data[0]
+        self.data[0], self.data[len(self) - 1] = self.data[len(self) - 1], self.data[0]
+        self.data.pop()
+        self._sink(0)
+        return min
+
+    @property
+    def min(self):
+        return self.data[0]
+
+    def __nonzero__(self):
+        return len(self) > 0
 
     def __len__(self):
         return len(self.data)
