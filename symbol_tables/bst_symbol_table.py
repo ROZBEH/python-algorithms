@@ -106,12 +106,6 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
         node.count = 1 + self._size(node.left) + self._size(node.right)
         return node
 
-    def select(self, index):
-        """
-        Selects n-th item from symbol table
-        """
-        pass
-
     def min(self, node=None, return_node=False):
         """
         Returns the minimal key.
@@ -202,22 +196,21 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
         else:
             raise IndexError('Ceil key is out of range')
 
-    def search(self, key):
+    def rank(self, key):
         """
-        Get ordered position of the key
-        Raises IndexError if no key was found
+        How many keys are lower than 'key'?
         """
-        def _search(node, key):
+        def _rank(node, key):
             if node is None:
                 return 0
             if key > node.key:
-                return 1 + self._size(node.left) + _search(node.right, key)
+                return 1 + self._size(node.left) + _rank(node.right, key)
             elif key < node.key:
-                return _search(node.left, key)
+                return _rank(node.left, key)
             else:
                 return self._size(node.left)
             
-        return _search(self.root, key)
+        return _rank(self.root, key)
 
     def __nonzero__(self):
         """
@@ -307,4 +300,3 @@ if __name__ == '__main__':
     # delete item and rearrange the tree
     del s['e']
     assert s.keys() == ['s', 'h', 'x', 'a', 'r', 'y', 'c', 'm', 'z']
-

@@ -31,13 +31,6 @@ class AbstractSymbolTable(object):
         pass
 
     @abstractmethod
-    def select(self, index):
-        """
-        Selects n-th item from symbol table
-        """
-        pass
-
-    @abstractmethod
     def min(self):
         """
         Returns the minimal key
