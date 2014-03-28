@@ -17,6 +17,13 @@ class AbstractSymbolTable(object):
         pass
 
     @abstractmethod
+    def __contains__(self, item):
+        """
+        Check if item is in the symbol table: if 'key' in st
+        """
+        pass
+
+    @abstractmethod
     def __setitem__(self, key, value):
         """
         Provides this: st['apple'] = 'fruit'

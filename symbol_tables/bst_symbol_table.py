@@ -47,18 +47,25 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
         self.root = put(self.root, key, value)
 
     def __getitem__(self, item):
-        i = self.root
+        node = self.root
 
         # perform a binary search
-        while i is not None:
-            if item < i.key:
-                i = i.left
-            elif item > i.key:
-                i = i.right
+        while node is not None:
+            if item < node.key:
+                node = node.left
+            elif item > node.key:
+                node = node.right
             else:
-                return i.value
+                return node.value
 
         raise IndexError('Item was not found')
+
+    def __contains__(self, item):
+        try:
+            self[item]
+            return True
+        except IndexError:
+            return False
 
     def __delitem__(self, key):
         """
@@ -91,7 +98,10 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
             node.count = self._size(node.left) + self._size(node.right) + 1
             return node
 
-        return delete(self.root, key)
+        if key in self:
+            return delete(self.root, key)
+        else:
+            raise IndexError('Key was not found')
 
     def del_min(self):
         """
@@ -250,6 +260,12 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
         """
         Returns the breadth-first traversed keys (level by level)
         """
+        return [x.key for x in self.nodes()]
+
+    def nodes(self):
+        """
+        Returns the breadth-first traversed nodes (level by level)
+        """
         q = Queue()
         q.put(self.root)
         keys = []
@@ -259,7 +275,7 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
                 q.put(node.left)
             if node.right:
                 q.put(node.right)
-            keys.append(node.key)
+            keys.append(node)
         return keys
 
     def height(self):

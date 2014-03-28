@@ -24,6 +24,13 @@ class OrderedSymbolTable(AbstractSymbolTable):
         else:
             raise IndexError('Symbol table is empty')
 
+    def __contains__(self, item):
+        try:
+            self[item]
+            return True
+        except IndexError:
+            return False
+
     def __setitem__(self, key, value):
         """
         Place new item in ordered place using kind of insertion sort
