@@ -49,16 +49,20 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
     def __getitem__(self, item):
         node = self.root
 
-        # perform a binary search
-        while node is not None:
-            if item < node.key:
-                node = node.left
-            elif item > node.key:
-                node = node.right
-            else:
-                return node.value
+        if isinstance(item, slice):
+            return self._inorder(node, self.ceil(item.start), self.floor(item.stop))
 
-        raise IndexError('Item was not found')
+        else:
+            # perform a binary search
+            while node is not None:
+                if item < node.key:
+                    node = node.left
+                elif item > node.key:
+                    node = node.right
+                else:
+                    return node.value
+
+            raise IndexError('Item was not found')
 
     def __contains__(self, item):
         try:
@@ -177,7 +181,7 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
 
         node = _floor(self.root, key)
         if node is not None:
-            return node.key
+            return node
         else:
             raise IndexError('Floor key is out of range')
 
@@ -202,7 +206,7 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
 
         node = _ceil(self.root, key)
         if node is not None:
-            return node.key
+            return node
         else:
             raise IndexError('Ceil key is out of range')
 
@@ -221,6 +225,15 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
                 return self._size(node.left)
             
         return _rank(self.root, key)
+
+    def size(self, lo, hi):
+        """
+        How many keys are between lo and hi?
+        """
+        if hi in self:
+            return self.rank(hi) - self.rank(lo) + 1
+        else:
+            return self.rank(hi) - self.rank(lo)
 
     def __nonzero__(self):
         """
@@ -243,18 +256,28 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
         """
         return iter(self._inorder(self.root))
 
-    def _inorder(self, node=None):
+    def _inorder(self, node=None, lo=None, hi=None):
         """
         Traverse the tree in natural order
         """
         if node is None:
             return []
 
-        # recursively traverse through the left subtree
-        left = self._inorder(node.left)
-        # recursively traverse through the right subtree
-        right = self._inorder(node.right)
-        return left + [node.key] + right
+        if node != lo:
+            # recursively traverse through the left subtree
+            left = self._inorder(node.left, lo, hi)
+        else:
+            left = []
+        if node != hi:
+            # recursively traverse through the right subtree
+            right = self._inorder(node.right, lo, hi)
+        else:
+            right = []
+        if lo and hi and lo.key <= node.key <= hi.key or not lo and not hi:
+            curr = [node.key]
+        else:
+            curr = []
+        return left + curr + right
 
     def keys(self):
         """
@@ -306,13 +329,17 @@ if __name__ == '__main__':
     s['z'] = 'z'
     s['c'] = 'ss'
     s['h'] = 'aa'
+    s['b'] = 'bb'
     s['m'] = 'hh'
 
+    # slice keys
+    assert s['c':'r'] == ['c', 'e', 'h', 'm', 'r']
+    # tree height
     assert s.height() == 4
     # natural order
-    assert list(iter(s)) == ['a', 'c', 'e', 'h', 'm', 'r', 's', 'x', 'y', 'z']
+    assert list(iter(s)) == ['a', 'b', 'c', 'e', 'h', 'm', 'r', 's', 'x', 'y', 'z']
     # breadth-first order
-    assert s.keys() == ['s', 'e', 'x', 'a', 'r', 'y', 'c', 'h', 'z', 'm']
+    assert s.keys() == ['s', 'e', 'x', 'a', 'r', 'y', 'c', 'h', 'z', 'b', 'm']
     # delete item and rearrange the tree
     del s['e']
-    assert s.keys() == ['s', 'h', 'x', 'a', 'r', 'y', 'c', 'm', 'z']
+    assert s.keys() == ['s', 'h', 'x', 'a', 'r', 'y', 'c', 'm', 'z', 'b']

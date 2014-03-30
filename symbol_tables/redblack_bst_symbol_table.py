@@ -232,10 +232,13 @@ if __name__ == '__main__':
     s['h'] = 'aa'
     s['m'] = 'hh'
 
+    # slice keys
+    assert s['c':'r'] == ['c', 'e', 'h', 'm', 'r']
     # natural order
     assert list(iter(s)) == ['a', 'c', 'e', 'h', 'm', 'r', 's', 'x', 'y', 'z']
     # breadth-first order
     assert s.keys() == ['s', 'm', 'y', 'e', 'r', 'x', 'z', 'c', 'h', 'a']
     # delete item and rearrange the tree
     del s['e']
+    # TODO: fix that assertion error
     assert s.keys() == ['s', 'm', 'y', 'h', 'r', 'x', 'z', 'c', 'a']
