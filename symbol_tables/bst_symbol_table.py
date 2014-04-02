@@ -62,13 +62,13 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
                 else:
                     return node.value
 
-            raise IndexError('Item was not found')
+            raise KeyError(repr(item))
 
     def __contains__(self, item):
         try:
             self[item]
             return True
-        except IndexError:
+        except KeyError:
             return False
 
     def __delitem__(self, key):
@@ -105,7 +105,7 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
         if key in self:
             return delete(self.root, key)
         else:
-            raise IndexError('Key was not found')
+            raise KeyError(repr(key))
 
     def del_min(self):
         """
@@ -183,7 +183,7 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
         if node is not None:
             return node
         else:
-            raise IndexError('Floor key is out of range')
+            raise KeyError(repr(key))
 
     def ceil(self, key):
         """
@@ -208,7 +208,7 @@ class BinarySearchTreeSymbolTable(AbstractSymbolTable):
         if node is not None:
             return node
         else:
-            raise IndexError('Ceil key is out of range')
+            raise KeyError(repr(key))
 
     def rank(self, key):
         """

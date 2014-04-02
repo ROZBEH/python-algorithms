@@ -28,7 +28,7 @@ class OrderedSymbolTable(AbstractSymbolTable):
         try:
             self[item]
             return True
-        except IndexError:
+        except KeyError:
             return False
 
     def __setitem__(self, key, value):
@@ -81,7 +81,7 @@ class OrderedSymbolTable(AbstractSymbolTable):
         try:
             return self.keys[index]
         except IndexError:
-            raise IndexError('Item was not found')
+            raise KeyError(repr(index))
 
     def min(self):
         """
@@ -114,7 +114,7 @@ class OrderedSymbolTable(AbstractSymbolTable):
         if mid > 0:
             return self.keys[mid - 1]
         else:
-            raise IndexError('Floor key is out of range')
+            raise KeyError(repr(key))
 
     def ceil(self, key):
         """
@@ -135,7 +135,7 @@ class OrderedSymbolTable(AbstractSymbolTable):
         if key < self.keys[mid]:
             return self.keys[mid]
         else:
-            raise IndexError('Ceil key is out of range')
+            raise KeyError(repr(key))
 
     def size(self, key_start, key_stop):
         """
@@ -160,7 +160,7 @@ class OrderedSymbolTable(AbstractSymbolTable):
             else:
                 return mid
 
-        raise IndexError('Item was not found')
+        raise KeyError(repr(key))
 
     def __nonzero__(self):
         return len(self.keys) > 0

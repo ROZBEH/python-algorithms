@@ -72,12 +72,14 @@ class Ball(object):
         """
         Time to hit a vertical wall
         """
+        # TODO: implement this
         raise NotImplemented
 
     def time_to_hit_h(self):
         """
         Time to hit a horizontal wall
         """
+        # TODO: implement this
         raise NotImplemented
 
     # collisions resolution
