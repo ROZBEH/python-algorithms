@@ -44,6 +44,13 @@ class LinearProbingHashST(object):
         # TODO: implement this
         raise NotImplemented
 
+    def __contains__(self, item):
+        try:
+            self[item]
+            return True
+        except KeyError:
+            return False
+
 
 if __name__ == "__main__":
     st = LinearProbingHashST(10)
@@ -58,4 +65,3 @@ if __name__ == "__main__":
     st['i'] = st.positive_hash('i')
     st['o'] = st.positive_hash('o')
     assert st['q'] == 0
-

@@ -78,6 +78,13 @@ class SeparateChainingHashST(object):
             node = node.next
         raise KeyError(repr(key))
 
+    def __contains__(self, item):
+        try:
+            self[item]
+            return True
+        except KeyError:
+            return False
+
 
 if __name__ == "__main__":
     st = SeparateChainingHashST()
