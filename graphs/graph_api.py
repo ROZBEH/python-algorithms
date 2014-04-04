@@ -47,14 +47,17 @@ class Graph(object):
                 count += 1
         return count / 2
 
-    def iter_adjacent(self):
-        return iter(self.adjacent)
+    def iter_adjacent(self, v):
+        return iter(self.adjacent[v])
 
     def __contains__(self, item):
         return item in self.adjacent
 
     def __len__(self):
         return len(self.adjacent)
+
+    def vertices(self):
+        return self.adjacent.iterkeys()
 
 if __name__ == '__main__':
     g = Graph()
