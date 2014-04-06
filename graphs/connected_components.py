@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from topological_sort import DepthFirstOrder
 
 
 class ConnectedComponents(object):
@@ -41,11 +42,33 @@ class ConnectedComponents(object):
     def id(self, v):
         return self.components[v]
 
+
+class StrongConnectedComponents(ConnectedComponents):
+    """
+    Strong connected components for directed graph.
+    Kosaraju Sharir method.
+    It looks practically the same as the Connected Components, but iterates over
+    the reversed postorder of vertices given by the topological sort
+    """
+
+    def __init__(self, graph):
+        self.graph = graph
+        self.visited = []
+        self.components = dict()
+        # components counter
+        self.count = 0
+        do = DepthFirstOrder(graph)
+        for v in do:
+            if v not in self.visited:
+                self.dfs(v)
+                self.count += 1
+
+
 if __name__ == '__main__':
     from graph_api import Graph
 
     g = Graph()
-    g.add_edge(0, 0)
+    g.add_edge(0)
     g.add_edge(1, 0)
     g.add_edge(2, 1)
     g.add_edge(3, 2)
@@ -61,4 +84,3 @@ if __name__ == '__main__':
 
     cc = ConnectedComponents(g)
     assert len(cc) == 4
-
