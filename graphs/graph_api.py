@@ -3,7 +3,7 @@
 
 class Graph(object):
     """
-    Graph API with adjacency-list data structure which uses (Edges + Verticies) memory
+    Undirected graph API with adjacency-list data structure which uses (Edges + Verticies) memory
     """
 
     def __init__(self):
@@ -59,12 +59,42 @@ class Graph(object):
     def __len__(self):
         return len(self.adjacent)
 
-    def vertices(self):
+    def __iter__(self):
         return self.adjacent.iterkeys()
+
+
+class Digraph(Graph):
+    """
+    Directed graph API which is similar to undirected graph API
+    """
+
+    def add_edge(self, v, w=None):
+        """
+        Add a vertex and an edge
+        """
+        if w is not None:
+            if v in self.adjacent:
+                self.adjacent[v].add(w)
+            else:
+                self.adjacent[v] = set([w])
+        else:
+            self.adjacent[v] = set()
+
 
 if __name__ == '__main__':
     g = Graph()
-    g.add_edge(0, 0)
+    g.add_edge(0)
+    g.add_edge(1, 0)
+    g.add_edge(2, 1)
+    g.add_edge(3, 2)
+    g.add_edge(4, 1)
+    g.add_edge(5, 2)
+    g.add_edge(6, 2)
+    g.add_edge(7, 3)
+    assert g.degree(2) == g.max_degree()
+
+    g = Digraph()
+    g.add_edge(0)
     g.add_edge(1, 0)
     g.add_edge(2, 1)
     g.add_edge(3, 2)

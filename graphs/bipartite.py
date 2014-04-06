@@ -17,7 +17,7 @@ class BipartiteGraph(object):
         # odd-length cycle
         self.cycle = []
 
-        for v in self.graph.vertices():
+        for v in self.graph:
             if v not in self.visited:
                 self._dfs(v)
 

@@ -38,7 +38,10 @@ class DepthFirstPaths(object):
         path = []
         while vertex is not self.start:
             path.append(vertex)
-            vertex = self.prev_to[vertex]
+            try:
+                vertex = self.prev_to[vertex]
+            except KeyError:
+                break
         path.append(vertex)
         return reversed(path)
 
@@ -56,6 +59,7 @@ class BreadthFirstPaths(object):
         self.start = start
         self.visited = []
         self.prev_to = dict()
+        self.dist_to = dict()
         self._build_paths()
 
     def _build_paths(self):
@@ -65,6 +69,7 @@ class BreadthFirstPaths(object):
         queue.put(vertex)
         self.visited.append(vertex)
         self.prev_to[vertex] = self.start
+        self.dist_to[vertex] = 0
         while not queue.empty():
             # dequeue the queue
             vertex = queue.get()
@@ -74,6 +79,7 @@ class BreadthFirstPaths(object):
                     queue.put(v)
                     self.visited.append(v)
                     self.prev_to[v] = vertex
+                    self.dist_to[v] = self.dist_to[vertex] + 1
 
     def has_path_to(self, vertex):
         """
@@ -90,14 +96,23 @@ class BreadthFirstPaths(object):
         path = []
         while vertex is not self.start:
             path.append(vertex)
-            vertex = self.prev_to[vertex]
+            try:
+                vertex = self.prev_to[vertex]
+            except KeyError:
+                break
         path.append(vertex)
         return reversed(path)
+
+    def distance(self, vertex):
+        """
+        Returns the minimum number of hops to the vertex from the starting vertex
+        """
+        return self.dist_to[vertex]
 
 if __name__ == '__main__':
     from graph_api import Graph
     g = Graph()
-    g.add_edge(0, 0)
+    g.add_edge(0)
     g.add_edge(1, 0)
     g.add_edge(2, 1)
     g.add_edge(3, 2)
@@ -112,4 +127,5 @@ if __name__ == '__main__':
     dfs = DepthFirstPaths(g, 0)
     assert list(dfs.path_to(10)) == [0, 1, 2, 3, 7, 10]
     bfs = BreadthFirstPaths(g, 0)
-    assert list(dfs.path_to(10)) == [0, 1, 2, 3, 7, 10]
+    assert list(bfs.path_to(10)) == [0, 1, 2, 3, 7, 10]
+    assert bfs.distance(10) == 5

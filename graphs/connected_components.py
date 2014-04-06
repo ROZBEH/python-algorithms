@@ -13,7 +13,7 @@ class ConnectedComponents(object):
         self.components = dict()
         # components counter
         self.count = 0
-        for v in self.graph.vertices():
+        for v in self.graph:
             if v not in self.visited:
                 self.dfs(v)
                 self.count += 1
