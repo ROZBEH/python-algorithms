@@ -9,18 +9,21 @@ class Graph(object):
     def __init__(self):
         self.adjacent = dict()
 
-    def add_edge(self, v, w):
+    def add_edge(self, v, w=None):
         """
         Add a vertex and an edge
         """
-        if v in self.adjacent:
-            self.adjacent[v].add(w)
+        if w is not None:
+            if v in self.adjacent:
+                self.adjacent[v].add(w)
+            else:
+                self.adjacent[v] = set([w])
+            if w in self.adjacent:
+                self.adjacent[w].add(v)
+            else:
+                self.adjacent[w] = set([v])
         else:
-            self.adjacent[v] = set([w])
-        if w in self.adjacent:
-            self.adjacent[w].add(v)
-        else:
-            self.adjacent[w] = set([v])
+            self.adjacent[v] = set()
 
     def degree(self, v):
         """
