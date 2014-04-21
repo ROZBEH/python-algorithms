@@ -32,6 +32,46 @@ class KruskalMST(object):
         return iter(self.mst)
 
 
+class PrimsMST(object):
+    """
+    Prims lazy MST
+    Another kind of a greedy algorithm which runs ELogE
+    """
+
+    def __init__(self, graph):
+        self.graph = graph
+        self.weight = 0
+        # the resulting minimum spanning tree
+        self.mst = Queue()
+        self.edges = MinPQ()
+        self.visited = []
+        # visit the root vertex (starting point)
+        self._visit(0)
+
+        while self.edges:
+            edge = self.edges.pop()
+            v = edge.either()
+            w = edge.other(v)
+            if v in self.visited and w in self.visited:
+                continue
+            else:
+                self.mst.put(edge)
+                self.weight += edge.weight
+                if v not in self.visited:
+                    self._visit(v)
+                if w not in self.visited:
+                    self._visit(w)
+
+    def _visit(self, vertex):
+        self.visited.append(vertex)
+        for e in self.graph.iter_adjacent(vertex):
+            if e.other(vertex) not in self.visited:
+                self.edges.push(e)
+
+    def __iter__(self):
+        return iter(self.mst)
+
+
 if __name__ == '__main__':
     from weighted_graph_api import WeightedGraphAPI, Edge
 
@@ -54,5 +94,7 @@ if __name__ == '__main__':
     graph.add_edge(Edge(6, 4, 0.93))
 
     mst = KruskalMST(graph)
-    print mst.weight
+    assert mst.weight == 1.81
+
+    mst = PrimsMST(graph)
     assert mst.weight == 1.81
