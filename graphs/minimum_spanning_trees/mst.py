@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from Queue import Queue
+
 from priority_queues.pq_api import MinPQ
 from union_find.uf import UnionFind
 
@@ -73,7 +74,7 @@ class PrimsMST(object):
 
 
 if __name__ == '__main__':
-    from weighted_graph_api import WeightedGraphAPI, Edge
+    from graphs.minimum_spanning_trees.weighted_graph_api import WeightedGraphAPI, Edge
 
     graph = WeightedGraphAPI()
     graph.add_edge(Edge(4, 5, 0.35))
