@@ -3,7 +3,7 @@
 
 class LinearProbingHashST(object):
     """
-    Separate chaining hash symbol table implementation
+    Linear probing hash symbol table implementation
     """
 
     def __init__(self, size):

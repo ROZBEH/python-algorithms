@@ -26,7 +26,7 @@ class DirectedEdge(object):
             return 0
 
     def __repr__(self):
-        return 'Edge({}, {}, {})'.format(self.vertex1, self.vertex2, self.weight)
+        return 'DirectedEdge({}, {}, {})'.format(self.vertex1, self.vertex2, self.weight)
 
 
 class WeightedDigraphAPI(object):
@@ -48,10 +48,13 @@ class WeightedDigraphAPI(object):
         self.edges.add(edge)
 
     def iter_adjacent(self, v):
-        return iter(self.adjacent[v])
+        try:
+            return iter(self.adjacent[v])
+        except KeyError:
+            return []
 
     def __iter__(self):
-        return iter(self.edges)
+        return self.adjacent.iterkeys()
 
     def __len__(self):
         return len(self.adjacent)

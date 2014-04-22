@@ -3,7 +3,7 @@
 
 class DepthFirstOrder(object):
     """
-    Topological sort of the graph if is does not have loops
+    Topological sort of the graph if it does not have loops
     Depth first search is used with slightly modifications
     """
 
@@ -12,7 +12,8 @@ class DepthFirstOrder(object):
         self.visited = []
         self.reversed_post = []
         for v in self.graph:
-            self._dfs(v)
+            if v not in self.visited:
+                self._dfs(v)
 
     def _dfs(self, vertex):
         self.visited.append(vertex)
@@ -23,8 +24,23 @@ class DepthFirstOrder(object):
         self.reversed_post.append(vertex)
 
     def __iter__(self):
-        return iter(self.reversed_post)
+        return reversed(self.reversed_post)
 
+
+class DepthFirstOrderDigraph(DepthFirstOrder):
+    """
+    Topological sort of the DAG
+    """
+
+    def _dfs(self, vertex):
+        self.visited.append(vertex)
+        # iterate over edges not vertices since it is a DAG
+        for edge in self.graph.iter_adjacent(vertex):
+            v = edge.vertex_to()
+            if v not in self.visited:
+                self._dfs(v)
+        # before exiting dfs - add the vertex to the list
+        self.reversed_post.append(vertex)
 
 if __name__ == '__main__':
     from graph_api import Graph
