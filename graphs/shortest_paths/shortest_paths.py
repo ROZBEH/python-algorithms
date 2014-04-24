@@ -7,7 +7,8 @@ from graphs.topological_sort import DepthFirstOrderDigraph
 class DijkstraSP(object):
     """
     Dijkstra digraph shortest path algorithm which runs ELogV,
-    where E is a number of edges and V is a number of vertices
+    where E is a number of edges and V is a number of vertices.
+    Edges must not have negative weights since the algorithm will loop over this negative cycles forever.
     """
 
     def __init__(self, graph, start):
@@ -58,7 +59,8 @@ class AcyclicSP(object):
     """
     DAG shortest path algorithm which runs E + V,
     where E is a number of edges and V is a number of vertices
-    It iterates over the vertices in topological order
+    It iterates over the vertices in topological order. Edges may have negative weights,
+    but the graph must not have any cycles.
     """
 
     def __init__(self, graph, start):
