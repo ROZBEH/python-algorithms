@@ -20,12 +20,10 @@ def lsd_radix_sort(strings, length):
         for c in xrange(len(count)):
             s = 0 if c == 0 else count[c - 1]
             count[c] += s
-
         # fill in the aux list for each of the digit column
-        count = [0] + count
         for i in xrange(len(strings)):
-            aux[count[ord(strings[i][d])]] = strings[i]
-            count[ord(strings[i][d])] += 1
+            aux[count[ord(strings[i][d]) - 1]] = strings[i]
+            count[ord(strings[i][d]) - 1] += 1
         # copy all data from aux to original list
         for i in xrange(len(strings)):
             strings[i] = aux[i]
