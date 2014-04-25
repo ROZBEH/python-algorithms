@@ -3,7 +3,7 @@
 
 def lsd_radix_sort(strings, length):
     """
-    LSD radix sort. Stable string sorting algorithm which runs O(W*N)
+    LSD radix sort. Stable string sorting algorithm which runs O(2W*N)
     where W is the length of all the strings (the length must be equal)
     and N is the number of strings to be sorted.
     """

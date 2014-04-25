@@ -3,8 +3,8 @@
 
 def msd_radix_sort(strings):
     """
-    MSD radix sort. Stable string sorting algorithm which runs O(W*N)
-    where W is the length of all the strings (the length must be equal)
+    MSD radix sort. Stable string sorting algorithm which runs O(2W*N)
+    where W is the length of the longest strings (the length should not be equal)
     and N is the number of strings to be sorted.
     It uses extra space for count array and aux array.
     """
@@ -12,10 +12,8 @@ def msd_radix_sort(strings):
     def sort(strings, aux, d, lo, hi):
         if hi <= lo:
             return
-        print 'lo=',lo, 'hi=',hi, 'd=', d
         # use ASCII table bounds
         radix = 256
-        #
         count = [0] * radix
         # count each number
         for i in xrange(lo, hi + 1):
