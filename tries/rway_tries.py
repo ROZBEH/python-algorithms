@@ -44,15 +44,18 @@ class RWaySt(object):
         self.root = put(self.root, 0, key, value)
 
     def __getitem__(self, item):
-        node = self.root
-        for i in xrange(len(item)):
-            node = node[ord(item[i])]
-            if node is None:
-                raise KeyError(item)
+        node = self._get_node(self.root, item)
         if node.has_value:
             return node.value
         else:
             raise KeyError(item)
+
+    def _get_node(self, node, key):
+        for i in xrange(len(key)):
+            node = node[ord(key[i])]
+            if node is None:
+                raise KeyError(key)
+        return node
 
     def __delitem__(self, key):
 
@@ -77,27 +80,52 @@ class RWaySt(object):
         """
         Iterate over items (key, value) pairs
         """
-        def it(node, l, key):
-            for n, node in enumerate(node.children):
-                if node is not None:
-                    if node.has_value:
-                        yield (key + chr(n), node.value)
-                    # Python 2 does not support "yield from" statement, so we do this:
-                    for item in it(node, l + 1, key + chr(n)):
-                        yield item
+        return self._collect(self.root, '')
 
-        return it(self.root, 0, '')
+    def _collect(self, node, key):
+        if node is None:
+            return
+        if node.has_value:
+            yield (key, node.value)
+        for n, child in enumerate(node.children):
+            # Python 2 does not support "yield from" statement, so we do this:
+            for item in self._collect(child, key + chr(n)):
+                yield item
 
+    def items_with_prefix(self, prefix):
+        try:
+            node = self._get_node(self.root, prefix)
+            items = []
+            for item in self._collect(node, prefix):
+                items.append(item)
+            return items
+        except KeyError:
+            return []
 
+    def longest_prefix(self, prefix):
 
+        def search(node, prefix, length, d):
+            if node is None:
+                return length
+            if node.has_value:
+                length = d
+            if len(prefix) == d:
+                return length
+            return search(node[ord(prefix[d])], prefix, length, d + 1)
+
+        return prefix[:search(self.root, prefix, 0, 0)]
 
 if __name__ == '__main__':
 
     st = RWaySt()
+    st['by'] = 'BY'
+    st['age'] = 'AGE'
     st['s'] = 'S'
     st['shell'] = 'SHELL'
     st['she'] = 'SHE'
     assert st['s'] == 'S'
     assert st['shell'] == 'SHELL'
     del st['she']
-    assert list(iter(st)) == [('s', 'S'), ('shell', 'SHELL')]
+    assert list(iter(st)) == [('age', 'AGE'), ('by', 'BY'), ('s', 'S'), ('shell', 'SHELL')]
+    assert st.items_with_prefix('a') == [('age', 'AGE')]
+    assert st.longest_prefix('shellsort') == 'shell'
