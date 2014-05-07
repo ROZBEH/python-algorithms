@@ -23,14 +23,13 @@ def search(string, pattern):
         for j in xrange(m - 1, -1, -1):
             # if there is a mismatch
             if ord(pattern[j]) != ord(string[i + j]):
-                # change the skip value
+                # change the skip value (so it is always >= 1)
                 skip = max(1, j - right[ord(string[i + j])])
                 break
         if skip == 0:
             return i
         i += skip
     return -1
-
 
 
 if __name__ == '__main__':
