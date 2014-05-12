@@ -20,6 +20,9 @@ class TernarySt(object):
             self.middle = None
             self.right = None
 
+        def __repr__(self):
+            return chr(self.char) if self.char is not None else '<empty>'
+
     def __init__(self):
         self.root = None
 
@@ -129,10 +132,14 @@ class TernarySt(object):
                 return length
             if node.has_value and ord(prefix[d]) == node.char:
                 length = d + 1
-            if len(prefix) - 1 == d:
+            if len(prefix) == length:
                 return length
-            return max(search(node.left, prefix, length, d), search(node.middle, prefix, length, d + 1), search(node.right, prefix, length, d))
-
+            if ord(prefix[d]) < node.char:
+                return search(node.left, prefix, length, d)
+            elif ord(prefix[d]) > node.char:
+                return search(node.right, prefix, length, d)
+            else:
+                return search(node.middle, prefix, length, d + 1)
 
         return prefix[:search(self.root, prefix, 0, 0)]
 

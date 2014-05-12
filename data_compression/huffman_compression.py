@@ -72,7 +72,7 @@ class Huffman(object):
                 else:
                     bw.writebit(True)
                     # close the output file
-                    # output_file.close()
+        # output_file.close()
 
     def extract(self, output_file):
         """
@@ -94,15 +94,15 @@ class Huffman(object):
                     node = node.left
             # write the character to output
             bw.writebits(node.char, 8)
-            # output_file.close()
+        # output_file.close()
 
     def _read_trie(self, br):
         bit = br.readbit()
         if bit:
-            # it is a leaf, so read the next 8 bits and create the node
+            # it is a leaf, so read the next 8 bits and create the leaf node
             return self.Node(int(br.readbits(8)), -1)
         else:
-            # it is an intermediary node
+            # it is an intermediary node, recursively create left and right nodes
             return self.Node(0, -1, self._read_trie(br), self._read_trie(br))
 
     def _write_trie(self, node, bw):
