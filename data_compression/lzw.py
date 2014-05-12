@@ -49,7 +49,7 @@ class LZW(object):
         """
         Restore the compressed data
         """
-        # create a ternary search trie and fill it with single ASCII characters
+        # create a dictionary with key => string matches
         st = dict()
         for i in xrange(self.radix):
             st[i] = chr(i)
