@@ -77,8 +77,8 @@ def _merge(items, aux, lo, mid, hi):
     """
     Merge
     """
-    for k in xrange(lo, hi + 1):
-        aux[k] = items[k]
+    # update the items in the current range (lo:hi+1)
+    aux[lo:hi + 1] = items[lo:hi + 1]
     i = lo
     j = mid + 1
     for k in xrange(lo, hi + 1):
